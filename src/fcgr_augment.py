@@ -35,7 +35,7 @@ if __name__ == "__main__":
     NUMBER_OF_PAIRS = 1
 
     # Create data directory
-    DATA_PATH = Path("../data/1_Cypriniformes")
+    DATA_PATH = Path("../data/4_Cyprininae")
     DF_NAME = "balanced_data.pkl"
     TRAIN_FILE = "train_data.pkl"
     DF_SAVE_PATH = DATA_PATH / DF_NAME
@@ -45,7 +45,8 @@ if __name__ == "__main__":
     class_names = sorted(records_df.label.unique())
     class_to_idx = {class_name: i for i, class_name in enumerate(class_names)}
 
-    augmentation_utils.plot_random_fcgr(records_df, k=6)
+    # TODO: make the plotting work
+    # augmentation_utils.plot_random_fcgr(records_df, k=6)
 
     data = generate_pairs(data=records_df,
                           weak_mutation_rate=WEAK_MUTATION_RATE,
