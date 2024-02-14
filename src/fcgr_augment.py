@@ -1,6 +1,7 @@
 from pathlib import Path
 from typing import Dict
 import pandas as pd
+import pickle as pkl
 
 from utils import augmentation_utils
 
@@ -44,9 +45,13 @@ if __name__ == "__main__":
     class_names = sorted(records_df.label.unique())
     class_to_idx = {class_name: i for i, class_name in enumerate(class_names)}
 
+    augmentation_utils.plot_random_fcgr(records_df, k=6)
+
     data = generate_pairs(data=records_df,
                           weak_mutation_rate=WEAK_MUTATION_RATE,
                           strong_mutation_rate=STRONG_MUTATION_RATE,
                           class_to_idx=class_to_idx,
                           k=K,
                           number_of_pairs=NUMBER_OF_PAIRS)
+    with open(TRAIN_DATA_PATH, "wb") as handle:
+        pkl.dump(data, handle, protocol=pkl.HIGHEST_PROTOCOL)
