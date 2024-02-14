@@ -1,1 +1,17 @@
 biopython
+pathlib
+pandas
+pickle
+torch
+os
+random
+timeit
+typing
+itertools
+tqdm
+collections
+PIL
+numpy
+math
+matplotlib
+sklearn
