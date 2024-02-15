@@ -6,7 +6,7 @@ import os
 import random
 from torch.utils.data import DataLoader
 from timeit import default_timer as timer
-from utils import data_setup, utils, model, loss_function, engine
+from src.utils import data_setup, model, engine, utils, loss_function
 
 if __name__ == "__main__":
     # setup device agnostic code

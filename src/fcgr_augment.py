@@ -3,7 +3,7 @@ from typing import Dict
 import pandas as pd
 import pickle as pkl
 
-from utils import augmentation_utils
+from src.utils import augmentation_utils
 
 
 def generate_pairs(data: pd.DataFrame,
