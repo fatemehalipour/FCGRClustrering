@@ -29,7 +29,7 @@ class PairSeqData(Dataset):
         if self.transform:
             return self.transform(original_chaos.repeat(3, 1, 1)), self.transform(mimic_chaos.repeat(3, 1, 1))
         else:
-            return original_chaos, mimic_chaos
+            return original_chaos.repeat(3, 1, 1), mimic_chaos.repeat(3, 1, 1)
 
 
 class SeqData(Dataset):
@@ -55,4 +55,4 @@ class SeqData(Dataset):
         if self.transform:
             return self.transform(chaos.repeat(3, 1, 1)), class_idx  # return data, label (X, y)
         else:
-            return chaos, class_idx  # return untranformed data and label
+            return chaos.repeat(3, 1, 1), class_idx  # return untranformed data and label

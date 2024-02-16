@@ -117,8 +117,9 @@ def train(model: torch.nn.Module,
         test_loss, test_acc = test_step(model=model,
                                         dataloader=test_dataloader,
                                         device=device)
-        print(
-            f"Epoch: {epoch} | Train loss: {train_loss:.6f} | Test loss: {test_loss:.6f} | Test accuracy: {test_acc * 100:.4f}%")
+        if epoch % 5 == 0:
+            print(
+                f"Epoch: {epoch} | Train loss: {train_loss:.6f} | Test loss: {test_loss:.6f} | Test accuracy: {test_acc * 100:.4f}%")
         results["train_loss"].append(train_loss)
         results["test_loss"].append(test_loss)
         results["test_acc"].append(test_acc)
@@ -138,7 +139,7 @@ def model_evaluation(model: torch.nn.Module,
     y_pred = []
     with torch.inference_mode():
         for x in X_test:
-            x = torch.Tensor(x).unsqueeze(dim=0).unsqueeze(dim=0).to(device)
+            x = torch.Tensor(x).unsqueeze(dim=0).repeat(3, 1, 1).unsqueeze(dim=0).to(device)
             y_pred.append(model.forward_cluster(x).argmax(dim=1).item())
     ind, acc = utils.cluster_acc(np.array(y_test), np.array(y_pred))
     return y_pred, ind, acc
