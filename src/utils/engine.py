@@ -104,7 +104,8 @@ def train(model: torch.nn.Module,
     results = {"train_loss": [],
                "test_loss": [],
                "test_acc": []}
-    for epoch in tqdm(range(epochs)):
+    # for epoch in tqdm(range(epochs)):
+    for epoch in range(epochs):
         lr = optimizer.param_groups[0]["lr"]
 
         train_loss = train_step(model=model,
@@ -139,7 +140,7 @@ def model_evaluation(model: torch.nn.Module,
     y_pred = []
     with torch.inference_mode():
         for x in X_test:
-            x = torch.Tensor(x).unsqueeze(dim=0).repeat(3, 1, 1).unsqueeze(dim=0).to(device)
+            x = torch.Tensor(x).unsqueeze(dim=0).unsqueeze(dim=0).to(device)
             y_pred.append(model.forward_cluster(x).argmax(dim=1).item())
     ind, acc = utils.cluster_acc(np.array(y_test), np.array(y_pred))
     return y_pred, ind, acc
