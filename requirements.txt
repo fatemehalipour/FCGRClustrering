@@ -6,3 +6,4 @@ tqdm
 numpy
 matplotlib
 sklearn
+scipy

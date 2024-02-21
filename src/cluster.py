@@ -24,9 +24,9 @@ if __name__ == "__main__":
     )
     parser.add_argument("--k", default=6, type=int,
                         help="k-mer size, an integer between 6-8")
-    parser.add_argument("--pairs_file_name", default="train_data.pkl", type=str,
+    parser.add_argument("--pairs_file_name", default="train_data_frag_0.95_0.8.pkl", type=str,
                         help="name of training data file")
-    parser.add_argument("--number_of_models", default=10, type=int,
+    parser.add_argument("--number_of_models", default=5, type=int,
                         help="number of models")
     parser.add_argument("--lr", default=3e-4, type=float,
                         help="learning rate")
@@ -36,7 +36,7 @@ if __name__ == "__main__":
                         help="instance temperature")
     parser.add_argument("--temp_clu", default=0.9, type=float,
                         help="cluster temperature")
-    parser.add_argument("--num_epochs", default=0, type=int,
+    parser.add_argument("--num_epochs", default=80, type=int,
                         help="number of epochs")
     parser.add_argument("--batch_size", default=512, type=int,
                         help="batch size")
@@ -52,7 +52,7 @@ if __name__ == "__main__":
     NORMALIZATION_METHOD = "Frobenius"  # Min-Max or Frobenius
 
     # Create data directory
-    DATA_PATH = Path("../data/" + args.dataset)
+    DATA_PATH = Path("data/" + args.dataset)
     DF_NAME = "balanced_data.pkl"
     DF_SAVE_PATH = DATA_PATH / DF_NAME
 

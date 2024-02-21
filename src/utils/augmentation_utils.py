@@ -2,6 +2,7 @@ import random
 import numpy as np
 import pandas as pd
 import matplotlib
+
 matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 from utils import CGR_utils
@@ -236,6 +237,50 @@ def generate_pairs_mutation_twin(data: pd.DataFrame,
             mutated_seq_strong_fcgr = fcgr(mutated_seq_strong)
             X_train.append((mutated_seq_weak_fcgr / seq_length,
                             mutated_seq_strong_fcgr / seq_length))
+
+        X_test.append(original_seq_fcgr / seq_length)
+        y_test.append(label)
+
+    # datatype conversion
+    X_train = np.array(X_train).astype("float32")
+    X_test = np.array(X_test).astype("float32")
+    y_test = np.array(y_test)
+
+    return X_train, X_test, y_test
+
+
+def generate_pairs_fragmentation_twin(data: pd.DataFrame,
+                                      frag_perc_strong: float,
+                                      frag_perc_weak: float,
+                                      class_to_idx,
+                                      k: int = 6,
+                                      number_of_pairs: int = 1):
+    # initiate FCGR
+    fcgr = CGR_utils.FCGR(k=k)
+
+    # initialize the outputs (X_train, X_test, y_test)
+    X_train = []
+    X_test, y_test = [], []
+
+    # iterate through the sequences
+    for i, record in tqdm(data.iterrows(), total=data.shape[0]):
+        label = class_to_idx[record.label]
+        original_seq = record.sequence
+        seq_length = len(original_seq)
+
+        # DNA -> fcgr
+        original_seq_fcgr = fcgr(original_seq)
+
+        for i in range(number_of_pairs):
+            frag_seq_weak = fragmentation(seq=original_seq,
+                                          frag_len=int(frag_perc_weak * seq_length))
+            frag_seq_strong = fragmentation(seq=original_seq,
+                                            frag_len=int(frag_perc_strong * seq_length))
+            # DNA -> fcgr
+            mutated_seq_weak_fcgr = fcgr(frag_seq_weak)
+            mutated_seq_strong_fcgr = fcgr(frag_seq_strong)
+            X_train.append((mutated_seq_weak_fcgr / int(frag_perc_weak * seq_length),
+                            mutated_seq_strong_fcgr / int(frag_perc_strong * seq_length)))
 
         X_test.append(original_seq_fcgr / seq_length)
         y_test.append(label)

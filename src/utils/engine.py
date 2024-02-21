@@ -118,9 +118,9 @@ def train(model: torch.nn.Module,
         test_loss, test_acc = test_step(model=model,
                                         dataloader=test_dataloader,
                                         device=device)
-        if epoch % 5 == 0:
-            print(
-                f"Epoch: {epoch} | Train loss: {train_loss:.6f} | Test loss: {test_loss:.6f} | Test accuracy: {test_acc * 100:.4f}%")
+        # if epoch % 5 == 0:
+        #     print(
+        #         f"Epoch: {epoch} | Train loss: {train_loss:.6f} | Test loss: {test_loss:.6f} | Test accuracy: {test_acc * 100:.4f}%")
         results["train_loss"].append(train_loss)
         results["test_loss"].append(test_loss)
         results["test_acc"].append(test_acc)
