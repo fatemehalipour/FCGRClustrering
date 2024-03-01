@@ -138,9 +138,11 @@ def model_evaluation(model: torch.nn.Module,
                      y_test):
     model.eval()
     y_pred = []
+    y_prob = []
     with torch.inference_mode():
         for x in X_test:
             x = torch.Tensor(x).unsqueeze(dim=0).unsqueeze(dim=0).to(device)
             y_pred.append(model.forward_cluster(x).argmax(dim=1).item())
+            y_prob.append(model.forward_cluster(x).cpu().numpy()[0])
     ind, acc = utils.cluster_acc(np.array(y_test), np.array(y_pred))
-    return y_pred, ind, acc
+    return np.array(y_prob), y_pred, ind, acc

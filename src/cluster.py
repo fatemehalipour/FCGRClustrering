@@ -91,6 +91,7 @@ if __name__ == "__main__":
                                  shuffle=False)
     ####################################################################################################################
     y_preds = []
+    y_probs = []
     for i in range(args.number_of_models):
         # Training
         print(f"Training model #{i + 1}")
@@ -137,7 +138,7 @@ if __name__ == "__main__":
         print(f"Total training time: {total_time:.3f} seconds")
 
         print(f"Evaluating model")
-        y_pred, ind, acc = engine.model_evaluation(model=projector_model, X_test=X_test, y_test=y_test)
+        y_prob, y_pred, ind, acc = engine.model_evaluation(model=projector_model, X_test=X_test, y_test=y_test)
         print(f"Accuracy of model: {acc * 100:.2f}%")
         # utils.plot_loss_curves(model_results, total_time=total_time)
         d = {}
@@ -146,16 +147,39 @@ if __name__ == "__main__":
         for j in range(len(y_pred)):  # we do this for each sample or sample batch
             y_pred[j] = d[y_pred[j]]
         y_preds.append(y_pred)
+        y_prob_hungarian = np.zeros_like(y_prob)
+        for j in range(len(d.keys())):  # we do this for each sample or sample batch
+            y_prob_hungarian[:, j] = y_prob[:, d[j]]
+        y_probs.append(y_prob_hungarian)
         print("#" * 100)
 
     ####################################################################################################################
-    # Majority voting
+    # Hard voting
     y_preds = np.array(y_preds)
     mode, counts = stats.mode(y_preds, axis=0)
 
     w = np.zeros((len(class_names), len(class_names)), dtype=np.int64)
     for i in range(y_test.shape[0]):
         w[y_test[i], mode[i]] += 1
-    print(f"Accuracy of ensemble of {args.number_of_models} models: {np.sum(np.diag(w) / np.sum(w))}")
+    print(f"Accuracy of hard voting of {args.number_of_models} models: {np.sum(np.diag(w) / np.sum(w))}")
+    print("Confusion matrix:")
+    print(w)
+
+    ####################################################################################################################
+    # Soft voting
+    y_probs = np.array(y_probs)
+
+    y_prob = []
+    for i in range(y_probs.shape[1]):
+        prob = np.zeros(y_probs.shape[2])
+        for j in range(y_probs.shape[0]):
+            prob += y_probs[j][i]
+        prob /= (y_probs.shape[0])
+        y_prob.append(prob)
+
+    w = np.zeros((len(class_names), len(class_names)), dtype=np.int64)
+    for i in range(y_test.shape[0]):
+        w[y_test[i], y_prob[i].argmax()] += 1
+    print(f"Accuracy of soft voting of {args.number_of_models} models: {np.sum(np.diag(w) / np.sum(w))}")
     print("Confusion matrix:")
     print(w)

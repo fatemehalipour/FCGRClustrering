@@ -11,4 +11,7 @@ module load python/3.10
 source ENV/bin/activate
 
 #pip install -r requirements.txt
-python3 src/cluster.py --dataset="1_Cypriniformes" --pairs_file_name="train_data_frag_0.95_0.8_k=7" --lr=0.0002 --temp_ins=0.1 --temp_clu=1.0 --number_of_models=10 --k=7
+python3 src/cluster.py --dataset="1_Cypriniformes" --pairs_file_name="train_data_frag_0.95_0.8.pkl" --lr=0.0002 --temp_ins=0.1 --temp_clu=1.0 --number_of_models=10
+python3 src/cluster.py --dataset="2_Cyprinoidei" --pairs_file_name="train_data_frag_0.95_0.8.pkl" --lr=0.0002 --temp_ins=0.1 --temp_clu=1.0 --number_of_models=10
+python3 src/cluster.py --dataset="3_Cyprinidae" --pairs_file_name="train_data_frag_0.95_0.8.pkl" --lr=0.0002 --temp_ins=0.1 --temp_clu=1.0 --number_of_models=10
+python3 src/cluster.py --dataset="4_Cyprininae" --pairs_file_name="train_data_frag_0.95_0.8.pkl" --lr=0.0002 --temp_ins=0.1 --temp_clu=1.0 --number_of_models=10
