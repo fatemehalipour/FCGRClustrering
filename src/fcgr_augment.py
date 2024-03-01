@@ -39,7 +39,7 @@ def generate_pairs(data: pd.DataFrame,
 
 if __name__ == "__main__":
     # Hyperparameters
-    K = 7
+    K = 6
     WEAK_MUTATION_RATE = 1e-4
     STRONG_MUTATION_RATE = 1e-3
     WEAK_FRAG_PERC = 0.95
@@ -48,9 +48,9 @@ if __name__ == "__main__":
 
     # Create data directory
     DATA_PATH = Path(
-        "../data/1_Cypriniformes")  # Choos a dataset from [1_Cypriniformes, 2_Cyprinoidei, 3_Cyprinidae, 4_Cyprininae]
+        "../data/4_Cyprininae")  # Choos a dataset from [1_Cypriniformes, 2_Cyprinoidei, 3_Cyprinidae, 4_Cyprininae]
     DF_NAME = "balanced_data.pkl"
-    TRAIN_FILE = "train_data_frag_0.95_0.8_k=7.pkl"
+    TRAIN_FILE = "train_data_frag_0.95_0.8.pkl"
     DF_SAVE_PATH = DATA_PATH / DF_NAME
     TRAIN_DATA_PATH = DATA_PATH / TRAIN_FILE
 
