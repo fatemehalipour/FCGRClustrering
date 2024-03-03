@@ -24,19 +24,19 @@ if __name__ == "__main__":
     )
     parser.add_argument("--k", default=6, type=int,
                         help="k-mer size, an integer between 6-8")
-    parser.add_argument("--pairs_file_name", default="train_data_frag_0.95_0.8.pkl", type=str,
+    parser.add_argument("--pairs_file_name", default="train_data_mutate_e-4_e-3.pkl", type=str,
                         help="name of training data file")
-    parser.add_argument("--number_of_models", default=5, type=int,
+    parser.add_argument("--number_of_models", default=10, type=int,
                         help="number of models")
-    parser.add_argument("--lr", default=3e-4, type=float,
+    parser.add_argument("--lr", default=1e-4, type=float,
                         help="learning rate")
     parser.add_argument("--weight_decay", default=1e-4, type=float,
                         help="weight decay")
-    parser.add_argument("--temp_ins", default=0.15, type=float,
+    parser.add_argument("--temp_ins", default=0.1, type=float,
                         help="instance temperature")
-    parser.add_argument("--temp_clu", default=0.9, type=float,
+    parser.add_argument("--temp_clu", default=1.0, type=float,
                         help="cluster temperature")
-    parser.add_argument("--num_epochs", default=80, type=int,
+    parser.add_argument("--num_epochs", default=100, type=int,
                         help="number of epochs")
     parser.add_argument("--batch_size", default=512, type=int,
                         help="batch size")
@@ -115,7 +115,7 @@ if __name__ == "__main__":
             lr=args.lr,
             weight_decay=args.weight_decay,
         )
-        scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=100, gamma=0.9)
+        scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=200, gamma=0.9)
         criterion_instance = loss_function.InstanceLoss(args.batch_size, args.temp_ins, device).to(device)
         criterion_cluster = loss_function.ClusterLoss(len(class_names), args.temp_clu, device).to(device)
 
@@ -149,7 +149,7 @@ if __name__ == "__main__":
         y_preds.append(y_pred)
         y_prob_hungarian = np.zeros_like(y_prob)
         for j in range(len(d.keys())):  # we do this for each sample or sample batch
-            y_prob_hungarian[:, j] = y_prob[:, d[j]]
+            y_prob_hungarian[:, d[j]] = y_prob[:, j]
         y_probs.append(y_prob_hungarian)
         print("#" * 100)
 
